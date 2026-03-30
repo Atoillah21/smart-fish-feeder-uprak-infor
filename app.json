@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "smart-fish-feeder",
+    "name": "SFF Dashboard",
     "slug": "smart-fish-feeder",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -14,7 +14,7 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/logo.png"
+        "foregroundImage": "./assets/images/logoapk.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,

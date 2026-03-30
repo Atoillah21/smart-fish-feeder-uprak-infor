@@ -33,6 +33,7 @@ const SmartFishFeeder = () => {
   const [status, setStatus] = useState("UNKNOWN");
   const [isFeeding, setIsFeeding] = useState(false);
   const [schedules, setSchedules] = useState([]);
+  const [lastMode, setLastMode] = useState("-");
 
   const [isOnline, setIsOnline] = useState(true);
   const [searchText, setSearchText] = useState("");
@@ -100,10 +101,18 @@ const SmartFishFeeder = () => {
         } else if (topic === TOPIC_LAST && data.last_feed) {
           setLastFeed(String(data.last_feed));
         } else if (topic === TOPIC_STATUS && data.status) {
-          setStatus(String(data.status));
-          // derive feeding indicator
-          setIsFeeding(String(data.status).toUpperCase().includes("FEED"));
-        } else if (topic === TOPIC_SCHEDULE && data.schedules) {
+  const s = String(data.status).toUpperCase();
+
+  setStatus(s);
+  setIsFeeding(s.includes("FEED"));
+
+  // 🔥 mapping ke mode
+  if (s === "FEEDING_MANUAL") {
+    setLastMode("MANUAL");
+  } else if (s === "FEEDING_AUTO") {
+    setLastMode("AUTO");
+  }
+} else if (topic === TOPIC_SCHEDULE && data.schedules) {
   setSchedules(data.schedules);
 }
       } catch (e) {
@@ -158,7 +167,7 @@ const SmartFishFeeder = () => {
   };
 
   const timeAgo = (dateString) => {
-  if (!dateString) return "Belum tersedia";
+  if (!dateString) return "Not available";
 
   const now = new Date();
   const last = new Date(dateString);
@@ -168,7 +177,7 @@ const SmartFishFeeder = () => {
   const diffHours = Math.floor(diffMinutes / 60);
   const diffDays = Math.floor(diffHours / 24);
 
-  if (diffMinutes < 1) return "Baru saja";
+  if (diffMinutes < 1) return "Just now";
   if (diffMinutes < 60) return `${diffMinutes} Min Ago`;
   if (diffHours < 24) return `${diffHours} Hours Ago`;
   return `${diffDays} Days Ago`;
@@ -329,11 +338,11 @@ const getNextFeedText = () => {
                 <Text style={styles.lastFeedBadgeText}>{timeAgo(lastFeed)}</Text>
               </View>
               <View style={styles.lastFeedBadgeAuto}>
-                <Text style={styles.lastFeedBadgeText}>Manual</Text>
+                <Text style={styles.lastFeedBadgeText}>{lastMode}</Text>
               </View>
             </View>
             <Text style={styles.feedTime}>
-              {lastFeed || "Belum tersedia"}
+              {lastFeed || "Not available"}
             </Text>
             <Text style={styles.nextFeed}>
               Next Feed:
