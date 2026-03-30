@@ -263,7 +263,7 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import mqtt from "mqtt";
 
-const client = mqtt.connect("ws://broker.emqx.io:8083/mqtt", {
+const client = mqtt.connect("wss://broker.emqx.io:8084/mqtt", {
   clientId: "rn_fish_" + Math.random().toString(16).substr(2, 8),
 });
 
